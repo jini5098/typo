@@ -1,0 +1,16 @@
+{
+  "name": "타이포 스튜디오",
+  "short_name": "타이포 스튜디오",
+  "description": "엔트리 타이포그래피를 블록으로 쉽게 만들고 엔트리 파일로 내보내는 제작 도구",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#e8ebf1",
+  "theme_color": "#161a26",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
