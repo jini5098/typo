@@ -126,6 +126,9 @@ dialog::backdrop{background:rgba(20,24,40,.45)}
 .px-foot a{color:var(--muted)}
 .upload{margin-left:auto}
 .upload input{display:none}
+.ex-method{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.ex-method .ex-mode:has(input:checked){border-color:var(--accent);background:#fff7ed}
+@media (max-width:620px){.ex-method,.ex-modes{grid-template-columns:1fr}}
 .ex-modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .ex-mode{border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;display:block}
 .ex-mode:has(input:checked){border-color:var(--accent);background:#f3f5ff}
@@ -402,11 +405,45 @@ dialog.wide{width:min(960px,94vw)}
 .tutor-card div{display:flex;justify-content:flex-end;gap:6px}
 /* 휴대폰 */
 .mobile-note{display:none}
+/* ===== 모바일 하단 내비게이션 ===== */
+#mnav{display:none}
 @media (max-width:760px){
-  .mobile-note{display:block;background:#fff9db;color:#946200;font-size:13px;padding:8px 12px}
-  #editorScreen .top{flex-wrap:wrap;height:auto;padding:8px}
-  #editorScreen .right,#btnExport,#btnShare,.tool-wrap,#saveState{display:none}
-  .left{padding:8px}
+  .mobile-note{display:none}
+  /* 상단바: 두 줄로 접고 핵심 버튼만 */
+  #editorScreen .top{flex-wrap:wrap;height:auto;min-height:50px;padding:6px 8px;gap:6px}
+  #editorScreen .proj-name{flex:1 1 110px;min-width:0}
+  #editorScreen .ver-chip,#editorScreen #saveState,#editorScreen #btnExpert,
+  #editorScreen .user-chip,#editorScreen #btnStep,#editorScreen #btnPause,
+  #editorScreen .speed{display:none}
+  #editorScreen .run{gap:4px}
+  #editorScreen .top .btn{padding:7px 10px;font-size:13px}
+  #editorScreen .spacer{flex-basis:100%;height:0}
+  /* 레이아웃: 한 화면씩 (flex column 안에서 꽉 채움) */
+  #editorScreen{height:100dvh}
+  .layout{display:block;flex:1;min-height:0;position:relative;overflow:hidden}
+  .left,.right{height:100%;overflow-y:auto;padding:10px;border-right:0}
+  .right{display:none;overflow:hidden}
+  body.m-stage .left{display:flex}
+  body.m-stage .right{display:none}
+  body.m-blocks .left,body.m-look .left,body.m-sound .left,body.m-timeline .left{display:none}
+  body.m-blocks .right,body.m-look .right,body.m-sound .right,body.m-timeline .right{display:flex}
+  .right .tabs{display:none}            /* 하단 내비로 대체 */
+  .pane{flex:1;min-height:0}
+  #paneLook,#paneSound{overflow-y:auto}
+  #blocklyDiv{position:absolute;inset:0}
+  .left .obj-card #objList{max-height:none}
+  /* 터치로 블록을 편하게 집도록 Blockly 플라이아웃·블록 키우기 */
+  .blocklyFlyout{min-width:0}
+  .blocklyText{font-size:13px}
+  /* 하단 내비게이션 바 */
+  #mnav{display:flex;flex:0 0 auto;height:58px;background:var(--panel);border-top:1px solid var(--line);align-items:stretch;padding-bottom:env(safe-area-inset-bottom)}
+  #mnav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;color:var(--muted);cursor:pointer;min-width:0}
+  #mnav button .ic{font-size:20px;line-height:1}
+  #mnav button.on{color:#4562f5;font-weight:700}
+  #mnav button.on .ic{transform:translateY(-1px)}
+}
+@media (max-width:760px) and (orientation:landscape){
+  .left .stage-card{max-width:60%}
 }
 
 .snd-row{grid-template-columns:34px 1fr auto auto 30px}
@@ -491,6 +528,14 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
 .thumb-logo{display:block;width:30%;aspect-ratio:1;background:var(--logo) center/contain no-repeat;opacity:.9}
 .brand{align-items:center}
 
+.brush-tools{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.bt-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.brush-kind{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;cursor:pointer;font-size:13px}
+.brush-kind.on{border-color:var(--accent);background:#eef1ff;font-weight:700}
+.bt-row label{display:flex;align-items:center;gap:5px;font-size:13px}
+.bt-swatches{display:flex;gap:5px}
+.bt-sw{width:22px;height:22px;border-radius:6px;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.brush-canvas{width:100%;max-width:640px;aspect-ratio:16/9;border:1px solid var(--line);border-radius:10px;touch-action:none;cursor:crosshair;background:repeating-conic-gradient(#eef1f6 0 25%,#fff 0 50%) 0 0/20px 20px;display:block;margin:0 auto}
 </style>
 </head>
 <body data-screen="boot">
@@ -528,7 +573,7 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
       <p id="authMsg" class="auth-msg" role="alert"></p>
       <p class="auth-links"><a href="#" id="forgotLink">비밀번호를 잊었어요</a></p>
       <p id="authNotice" class="auth-notice"></p>
-      <p class="auth-foot"><b class="ver">버전 3.2.0 (10/8)</b> · <span id="modeNote"></span> <a href="#" data-about="about">소개</a> <a href="#" id="diagBtn">서버 점검</a> <a href="#" id="adminLink">관리자</a></p>
+      <p class="auth-foot"><b class="ver">버전 3.5.0 (10/28)</b> · <span id="modeNote"></span> <a href="#" data-about="about">소개</a> <a href="#" id="diagBtn">서버 점검</a> <a href="#" id="adminLink">관리자</a></p>
     </div>
   </div>
 </section>
@@ -575,7 +620,7 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
 <section id="editorScreen" class="screen">
   <header class="top">
     <button class="btn" data-go="home" title="내 작품 목록">← 내 작품</button>
-    <input id="projName" class="proj-name" aria-label="작품 이름"><span class="ver-chip">v3.2.0</span>
+    <input id="projName" class="proj-name" aria-label="작품 이름"><span class="ver-chip">v3.5.0</span>
     <div class="run">
       <button id="btnRun" class="btn btn-run">▶ 시작하기</button>
       <button id="btnStop" class="btn btn-stop" disabled>■ 정지하기</button>
@@ -601,6 +646,7 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
         <button data-tool="file">💾 파일로 저장</button>
         <button data-tool="settings">⚙ 설정</button>
       </div></div>
+    <button id="btnPng" class="btn" title="지금 화면을 사진(PNG)으로 저장">📷 사진 저장</button>
     <button id="btnExport" class="btn primary">엔트리 파일로 내보내기</button>
     <span class="user-chip"><span class="u-nick"></span><span class="tier-badge"></span></span>
   </header>
@@ -627,6 +673,7 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
             <button data-add="text">+ 글상자</button>
             <button data-add="shape">+ 도형</button>
             <button data-add="image">+ 이미지</button>
+            <button data-add="brush">🖌️ 붓</button>
           </div>
         </div>
         <ul id="objList"></ul>
@@ -653,6 +700,12 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
       <input type="file" id="sndFile" accept="audio/*,.mp3,.wav" hidden>
     </section>
   </main>
+  <nav id="mnav" aria-label="모바일 화면 전환">
+    <button data-mview="stage" class="on"><span class="ic">🎬</span>무대</button>
+    <button data-mview="blocks" id="mnavBlocks"><span class="ic">🧩</span>블록</button>
+    <button data-mview="look"><span class="ic">🎨</span>모양</button>
+    <button data-mview="sound"><span class="ic">🔊</span>소리</button>
+  </nav>
 </section>
 
 <!-- ============ 4. 관리자 ============ -->
@@ -703,6 +756,33 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
   <div class="dlg-body"><div class="shape-grid" id="shapeGrid"></div></div>
 </dialog>
 
+<dialog id="dlgBrush">
+  <div class="dlg-head"><h3>🖌️ 붓으로 그리기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dlg-body">
+    <div class="brush-tools">
+      <div class="bt-row">
+        <button class="brush-kind on" data-bk="pen">✏️ 펜</button>
+        <button class="brush-kind" data-bk="marker">🖍 마커</button>
+        <button class="brush-kind" data-bk="neon">💡 네온</button>
+        <button class="brush-kind" data-bk="crayon">🖌 크레용</button>
+        <button class="brush-kind" data-bk="eraser">🧽 지우개</button>
+      </div>
+      <div class="bt-row">
+        <label>색 <input type="color" id="brushColor" value="#ffd43b"></label>
+        <label>굵기 <input type="range" id="brushSize" min="2" max="40" value="10"></label>
+        <span class="bt-swatches" id="brushSwatches"></span>
+      </div>
+    </div>
+    <canvas id="brushCanvas" width="640" height="360" class="brush-canvas"></canvas>
+    <div class="bt-row" style="margin-top:10px">
+      <button class="btn" id="brushUndo">↶ 되돌리기</button>
+      <button class="btn" id="brushClear">전체 지우기</button>
+      <button class="btn primary" id="brushDone" style="margin-left:auto">완료 → 무대에 추가</button>
+    </div>
+    <p class="hint">그린 그림이 "그림 오브젝트"로 무대에 들어가요. 블록으로 움직이고 엔트리로도 그림 오브젝트로 나가요. 가로·세로 크기도 자유!</p>
+  </div>
+</dialog>
+
 <dialog id="dlgImage">
   <div class="dlg-head"><h3>이미지 추가</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dlg-body">
@@ -729,6 +809,12 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
 <dialog id="dlgExport">
   <div class="dlg-head"><h3>엔트리 파일로 내보내기</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dlg-body">
+    <div class="ex-method">
+      <label class="ex-mode"><b><input type="radio" name="exMethod" value="bake" checked>프레임 베이킹 (추천·정확)</b>
+        <span>미리보기를 한 프레임씩 기록해서 똑같이 재현해요. 모든 효과가 정확히 나와요. 지금까지 쓰던 방식이에요.</span></label>
+      <label class="ex-mode"><b><input type="radio" name="exMethod" value="codebind">코드 바인딩 (실험·엔트리에서 수정 가능)</b>
+        <span>블록을 엔트리 블록으로 그대로 바꿔서 엔트리에서 읽고 고칠 수 있어요. 엔트리에 없는 움직임(이징·물결·글자별·타자치기 등)이 든 오브젝트는 자동으로 프레임 베이킹으로 나가요(하이브리드). <b>실험 기능이라 엔트리에서 잘 열리는지 확인이 필요해요.</b></span></label>
+    </div>
     <div class="ex-modes">
       <label class="ex-mode"><b><input type="radio" name="exMode" value="image" checked>그림으로 (추천)</b>
         <span>글자를 모양 그림으로 바꿔요. 글꼴·빛 번짐·외곽선·투명도가 미리보기와 똑같이 나와요. 엔트리에서 글자 내용은 못 고쳐요.</span></label>
@@ -875,19 +961,19 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
         <li><b>노래에 맞추기</b> — 배경음악과 박자 찍기, 초시계</li>
         <li><b>꾸미기</b> — 웹폰트 55종, 스타일 한 번에 입히기, 도형 19종, 무료 그림 검색</li>
         <li><b>편하게</b> — 자주 쓰는 블록, 효과 꾸러미, 내 효과, 블록 찾기, 일시정지, 시간 막대, 저장 기록, 전문가 모드</li>
-        <li><b>내보내기</b> — 블록 수를 줄인 엔트리 파일, 엔트리처럼 미리보기, 영상(mp4)</li>
+        <li><b>내보내기</b> — 블록 수를 줄인 엔트리 파일, 엔트리처럼 미리보기, 영상(mp4), 사진(PNG) 저장</li>
         <li><b>함께 보기</b> — 둘러보기, 좋아요, 리믹스</li>
       </ul>
       <table class="tier-table"><thead><tr><th></th><th>베타</th><th>일반</th><th>프로</th><th>하이퍼</th></tr></thead><tbody>
         <tr><td>만들고 엔트리로 내보내기</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
         <tr><td>블록</td><td>핵심</td><td>절반</td><td>전부</td><td>전부</td></tr>
-        <tr><td>글꼴 · 그림 검색</td><td>14종 · 50장</td><td>절반 · 250장</td><td>전부</td><td>전부</td></tr>
+        <tr><td>글꼴 · 그림 검색</td><td>18종 · 50장</td><td>절반 · 250장</td><td>전부</td><td>전부</td></tr>
         <tr><td>새 블록 공개</td><td>7일 뒤</td><td>3일 뒤</td><td>바로</td><td>바로</td></tr>
         <tr><td>워터마크</td><td>있음</td><td>있음</td><td>없음</td><td>없음</td></tr>
         <tr><td>엔트리 내보내기 방식</td><td>독립 실행</td><td>독립 실행</td><td>블록·함수</td><td>블록·함수</td></tr>
       </tbody></table>
       <p class="ab-maker">만든 사람 <b>vectortype</b> · <a href="https://playentry.org/profile/641582adedcf8a00377de185/project?sort=created&amp;term=all&amp;isOpen=all" target="_blank" rel="noopener">엔트리 프로필 보기 ↗</a><br>지금은 베타 서비스 중이에요. 불편한 점이나 바라는 기능은 공지사항이나 관리자에게 알려 주세요.</p>
-      <p class="hint">버전 3.2.0 · 2026년 10월 8일</p>
+      <p class="hint">버전 3.5.0 · 2026년 10월 28일</p>
     </div>
     <div class="ab-pane" data-pane="log" hidden>
       <p class="hint">버전 번호: 첫째 자리는 큰 변화, 둘째는 기능 추가, 셋째는 버그·보안 수정이에요. 새 블록은 하이퍼·프로 → 일반 → 베타 순서로 열려요.</p>
@@ -2065,6 +2151,8 @@ const Interp = {
       case 'typo_move_by': yield* this.tween(sp, { x: sp.x + N('X'), y: sp.y + N('Y') }, this.fr(e, ctx, b), this.ease(b)); break;
       case 'typo_scale_set': sp.scale = Math.max(0, N('SCALE')) / 100; break;
       case 'typo_scale_to': yield* this.tween(sp, { scale: Math.max(0, N('SCALE')) / 100 }, this.fr(e, ctx, b), this.ease(b)); break;
+      case 'typo_size_wh': sp.w = U.clamp(N('W'), 1, 2000); sp.h = U.clamp(N('H'), 1, 2000); break;
+      case 'typo_size_wh_to': yield* this.tween(sp, { w: U.clamp(N('W'), 1, 2000), h: U.clamp(N('H'), 1, 2000) }, this.fr(e, ctx, b), this.ease(b)); break;
       case 'typo_rotate_set': sp.rotation = N('DEG'); break;
       case 'typo_rotate_to': yield* this.tween(sp, { rotation: N('DEG') }, this.fr(e, ctx, b), this.ease(b)); break;
       case 'typo_rotate_by': yield* this.tween(sp, { rotation: sp.rotation + N('DEG') }, this.fr(e, ctx, b), this.ease(b)); break;
@@ -2364,22 +2452,22 @@ const Interp = {
    ===================================================================== */
 // 엔트리 블록 색 (entryjs EntryStatic.colorSet 그대로) [기본색, 테두리색, 아이콘]
 const CAT = {
-  fav: ['자주 쓰는 블록', '#5b6478', '#474e5e', 'fav'],
-  tpl: ['효과 꾸러미', '#e0457b', '#c4215a', 'tpl'],
-  mine: ['내 효과', '#7b5fd9', '#512fc5', 'mine'],
-  start: ['시작', '#00994d', '#00773c', 'start'],
-  flow: ['흐름', '#1187b0', '#0d6989', 'flow'],
-  motion: ['움직임', '#a53bf0', '#8611d9', 'motion'],
-  looks: ['생김새', '#e5263f', '#ba162c', 'looks'],
-  text: ['글상자', '#cf4a00', '#a13a00', 'text'],
-  sound: ['소리', '#5a8a00', '#466c00', 'sound'],
-  judge: ['판단', '#3f5cf0', '#1132db', 'judge'],
-  calc: ['계산', '#a87500', '#835b00', 'calc'],
-  enter: ['나타나기·사라지기', '#b03a2e', '#892d24', 'enter'],
-  fx: ['반복 효과', '#4b3aa8', '#3a2d83', 'fx'],
-  cam: ['카메라', '#00878a', '#00696c', 'cam'],
-  vars: ['변수', '#c235bd', '#972993', 'vars'],
-  func: ['함수', '#8a5530', '#6c4225', 'func'],
+  fav: ['자주 쓰는 블록', '#79879e', '#5d6a80', 'fav'],
+  tpl: ['효과 꾸러미', '#ff4d8d', '#d62e6e', 'tpl'],
+  mine: ['내 효과', '#9168ff', '#6f45e6', 'mine'],
+  start: ['시작', '#12c266', '#0a9a4e', 'start'],
+  flow: ['흐름', '#18abee', '#0f84bd', 'flow'],
+  motion: ['움직임', '#b14dff', '#8f2ae6', 'motion'],
+  looks: ['생김새', '#ff3b4e', '#dc1f33', 'looks'],
+  text: ['글상자', '#ff7a1a', '#db5e00', 'text'],
+  sound: ['소리', '#8ecb10', '#6fa006', 'sound'],
+  judge: ['판단', '#4f72ff', '#2f4ae0', 'judge'],
+  calc: ['계산', '#f0a500', '#c98500', 'calc'],
+  enter: ['나타나기·사라지기', '#ff5a86', '#e23468', 'enter'],
+  fx: ['반복 효과', '#6d5bf0', '#4f3fc2', 'fx'],
+  cam: ['카메라', '#10bcbf', '#089093', 'cam'],
+  vars: ['변수', '#d640d2', '#ad29a9', 'vars'],
+  func: ['함수', '#bd8640', '#8c5f2c', 'func'],
 };
 // 블록 끝에 붙는 엔트리식 아이콘 (흰색 선 그림)
 const ICONS = {
@@ -2549,6 +2637,8 @@ const BLOCKS = (() => {
   B('looks', 'typo_effect_clear', '효과 지우기');
   B('looks', 'typo_scale_set', '크기 %1 %', [num('SCALE')], { SCALE: 100 });
   B('looks', 'typo_scale_to', '크기 %1 % 로 %2 초 %3', [num('SCALE'), num('SEC'), ease()], { SCALE: 150, SEC: 0.5 });
+  B('looks', 'typo_size_wh', '가로 %1 세로 %2 로', [num('W'), num('H')], { W: 160, H: 160 }, { tip: '도형·붓·사진의 가로·세로 크기를 따로 정해요. 글상자에는 효과가 없어요.' });
+  B('looks', 'typo_size_wh_to', '가로 %1 세로 %2 로 %3 초 %4', [num('W'), num('H'), num('SEC'), ease()], { W: 240, H: 120, SEC: 0.5 }, { tip: '가로·세로를 부드럽게(이징) 바꿔요. 도형·붓·사진 전용이에요.' });
   B('looks', 'typo_flip', '%1 뒤집기', [dd('AXIS', [['좌우', 'x'], ['상하', 'y']])]);
   B('looks', 'typo_layer', '%1 보내기', [dd('WHERE', [['맨 앞으로', 'FRONT'], ['맨 뒤로', 'BACK']])]);
   B('looks', 'typo_shape_change', '도형 %1 로', [dd('SHAPE', SHAPE_OPTIONS)], {}, { tip: '도형 오브젝트에서만 바뀌어요.' });
@@ -2664,9 +2754,9 @@ function buildToolbox(tier = 'pro') {
   const cats = {};
   for (const k of order) {
     const catNeed = GATE.cat[k] ?? 0;
-    const c = { kind: 'category', name: catLabel(k) + (rank < catNeed ? ' 🔒' : ''), colour: CAT[k][1], contents: [], cssconfig: css(k) };
-    if (rank < catNeed) c.contents.push({ kind: 'label', text: lockLabel(catNeed) });
-    else if (k === 'mine') c.custom = 'MY_FX';
+    if (rank < catNeed) continue; // 잠긴 카테고리는 모든 버전에서 숨김 (깔끔하게)
+    const c = { kind: 'category', name: catLabel(k), colour: CAT[k][1], contents: [], cssconfig: css(k) };
+    if (k === 'mine') c.custom = 'MY_FX';
     else if (k === 'vars') c.custom = 'VARIABLE';
     else if (k === 'func') c.custom = 'PROCEDURE';
     cats[k] = c;
@@ -2678,10 +2768,7 @@ function buildToolbox(tier = 'pro') {
     if (!GATE.isOpen(tier, json.type)) { (locked[cat] = locked[cat] || []).push([GATE.lockReason(tier, json.type), blockLabel(json)]); continue; }
     cats[cat].contents.push(entry);
   }
-  for (const [cat, list] of Object.entries(locked)) {
-    cats[cat].contents.push({ kind: 'sep', gap: 24 }, { kind: 'label', text: `🔒 잠긴 블록 ${list.length}개` });
-    list.slice(0, 10).forEach(([why, t]) => cats[cat].contents.push({ kind: 'label', text: `· ${t.slice(0, 30)} (${why})` }));
-  }
+  // 잠긴 블록은 조용히 숨김 (어떤 블록이 잠겼는지 표시하지 않음 — 모든 버전)
   const sh = v => ({ shadow: { type: 'math_number', fields: { NUM: v } } });
   // 자주 쓰는 블록
   const entryOf = t => (BLOCKS.find(x => x[1].type === t) || [])[2];
@@ -2693,7 +2780,7 @@ function buildToolbox(tier = 'pro') {
     if (!usesOk(blk)) continue;
     cats.tpl.contents.push({ kind: 'label', text: label }, { kind: 'block', ...JSON.parse(JSON.stringify(blk)) });
   }
-  if (!cats.tpl.contents.length) cats.tpl.contents.push({ kind: 'label', text: '🔒 버전을 올리면 꾸러미가 더 열려요' });
+  if (cats.tpl && !cats.tpl.contents.length) cats.tpl.contents.push({ kind: 'label', text: '효과 꾸러미를 더 추가하고 있어요 ✨' });
   if (rank >= GATE.soundFile) cats.sound.contents.unshift({ kind: 'button', text: '+ 소리 추가하기', callbackKey: 'addSound' });
   cats.judge.contents.push(
     { kind: 'block', type: 'logic_compare', inputs: { A: sh(10), B: sh(10) } },
@@ -2710,7 +2797,7 @@ function buildToolbox(tier = 'pro') {
     { kind: 'block', type: 'math_modulo', inputs: { DIVIDEND: sh(10), DIVISOR: sh(3) } },
   );
   if (rank >= 1) cats.calc.contents.splice(2, 0, { kind: 'block', type: 'math_arithmetic', fields: { OP: 'MULTIPLY' }, inputs: { A: { block: { type: 'typo_letter_no' } }, B: sh(10) } });
-  return { kind: 'categoryToolbox', contents: order.map(k => cats[k]) };
+  return { kind: 'categoryToolbox', contents: order.map(k => cats[k]).filter(Boolean) };
 }
 
 const FAVORITES = ['typo_on_start', 'typo_wait', 'typo_each_letter', 'typo_glide_from', 'typo_pop_in', 'typo_fade_in', 'typo_fade_out',
@@ -2970,6 +3057,7 @@ const Exporter = {
     const usedNames = new Map();
     const uniq = name => { const c = (usedNames.get(name) || 0) + 1; usedNames.set(name, c); return c === 1 ? name : `${name} ${c}`; };
     const debug = [];
+    let cbBound = 0, cbBaked = 0;   // 코드 바인딩 통계
     // 파티클은 터질 때마다 오브젝트 하나(움직이는 그림)로 묶는다
     const bursts = new Map(), plain = [];
     for (const sp of B.order) {
@@ -2993,6 +3081,12 @@ const Exporter = {
           ? this.textObject(sp, fr, warn, qk, opts, events)
           : await this.spriteObject(sp, fr, warn, qk, files, opts, events);
         if (obj && sp === B.order[0]) bgObj = obj;
+        // 코드 바인딩: 가능한 오브젝트만 엔트리 네이티브 블록으로 교체(나머지는 프레임 베이킹 유지)
+        if (opts.method === 'codebind' && obj) {
+          const src = project.objects.find(oo => oo.id === sp.objId);
+          const bound = src ? this.codebindBody(src) : null;
+          if (bound) { obj._body = bound; cbBound++; } else if (src && (src.blocks && src.blocks.blocks && (src.blocks.blocks.blocks || []).length)) cbBaked++;
+        }
       }
       if (!obj) continue;
       obj.id = U.uid(4); obj.name = uniq(obj._name || '오브젝트'); obj.scene = sceneId;
@@ -3012,6 +3106,10 @@ const Exporter = {
     }
     for (const o of objects) { o.script = JSON.stringify(o._threads); delete o._threads; }
     if (objects.length > 80) warn.add(`오브젝트가 ${objects.length}개예요. 엔트리가 느려질 수 있어요 ("글자마다"를 꼭 필요한 곳에만 써 보세요).`);
+    if (opts.method === 'codebind') {
+      if (cbBaked) warn.add(`코드 바인딩: ${cbBound}개 오브젝트는 엔트리 블록으로 바꿨고, ${cbBaked}개는 엔트리에 없는 움직임(이징·물결·글자별 등)이 있어 프레임 베이킹으로 내보냈어요(하이브리드).`);
+      warn.add('코드 바인딩은 실험 기능이에요. 엔트리에서 잘 열리는지 꼭 확인하고, 문제가 있으면 프레임 베이킹으로 내보내 주세요.');
+    }
     const project_json = {
       objects,
       scenes: [{ id: sceneId, name: '장면 1' }],
@@ -3434,6 +3532,47 @@ const Exporter = {
     return [0.6 * qk, 0.6 * qk, (0.6 * qk) / Math.max(1, factor), 0.6 * qk, 1 * qk, 1 * qk, 1 * qk];
   },
 
+  /* =====================================================================
+     코드 바인딩(실험) — 블록마다 지정된 엔트리 블록으로 '그대로' 변환한다.
+     프레임 베이킹과 달리 엔트리에서 블록을 읽고 고칠 수 있다. 다만 엔트리에
+     대응 블록이 없는 움직임(이징 tween·물결·글자별·타자치기·카메라 등)은
+     표현할 수 없어서, 그런 블록을 쓰는 오브젝트는 '그 오브젝트만' 자동으로
+     프레임 베이킹으로 내보낸다(하이브리드). 아래 집합의 블록만, 그리고 값이
+     고정 숫자일 때만 변환하고, 하나라도 아니면 통째로 null을 돌려준다.
+     ⚠ 실제 .ent 동작은 엔트리에서 직접 확인이 필요하다(여기선 검증 불가).
+     ===================================================================== */
+  _cbLit(b, name) {                         // 입력에서 고정 숫자 읽기
+    const i = Interp.I(b, name);
+    if (!i) return { ok: true, v: 0 };       // 빈 입력 = 기본 0
+    if (i.type === 'math_number') { const v = Number(Interp.F(i, 'NUM')); return isFinite(v) ? { ok: true, v } : { ok: false }; }
+    return { ok: false };                    // 변수·계산·랜덤 등은 변환 불가
+  },
+  _cbStack(first) {                          // 블록 체인 → 엔트리 블록 배열(불가하면 null)
+    const out = [];
+    for (let b = first; b; b = Interp.N(b)) {
+      if (b.enabled === false) continue;
+      const t = b.type, lit = n => this._cbLit(b, n);
+      if (t === 'typo_wait') { const s = lit('SEC'); if (!s.ok) return null; out.push(this.blk('wait_second', [this.n(Math.max(0, s.v)), null])); }
+      else if (t === 'typo_repeat') { const s = lit('TIMES'); if (!s.ok) return null; const body = this._cbStack(Interp.S(b, 'DO')); if (body === null) return null; out.push(this.blk('repeat_basic', [this.n(Math.max(0, Math.floor(s.v))), null], [body])); }
+      else if (t === 'typo_forever') { const body = this._cbStack(Interp.S(b, 'DO')); if (body === null) return null; out.push(this.blk('repeat_inf', [null], [body])); }
+      else if (t === 'typo_goto') { const x = lit('X'), y = lit('Y'); if (!x.ok || !y.ok) return null; out.push(this.blk('locate_xy', [this.n(x.v), this.n(y.v), null])); }
+      else if (t === 'typo_scale_set') { const s = lit('SCALE'); if (!s.ok) return null; out.push(this.blk('set_scale_size', [this.n(Math.max(0, s.v)), null])); }
+      else if (t === 'typo_rotate_set') { const s = lit('DEG'); if (!s.ok) return null; out.push(this.blk('rotate_absolute', [this.ang(s.v), null])); }
+      else if (t === 'typo_show') out.push(this.blk('show', [null]));
+      else if (t === 'typo_hide') out.push(this.blk('hide', [null]));
+      else if (t === 'typo_flip') out.push(this.blk(Interp.F(b, 'AXIS') === 'y' ? 'flip_y' : 'flip_x', [null]));
+      else if (t === 'typo_layer') out.push(this.blk('change_object_index', [Interp.F(b, 'WHERE') === 'BACK' ? 'BACK' : 'FRONT', null]));
+      else return null;                      // 모르는/복잡한 블록 → 프레임 베이킹으로
+    }
+    return out;
+  },
+  codebindBody(o) {                          // 오브젝트 전체가 변환 가능하면 엔트리 블록 배열, 아니면 null
+    const tops = (o.blocks && o.blocks.blocks && o.blocks.blocks.blocks) || [];
+    const hats = tops.filter(b => b.enabled !== false && /^typo_on_(start|time|signal)$/.test(b.type));
+    if (hats.length !== 1 || hats[0].type !== 'typo_on_start') return null;   // v1: '시작하기' 묶음 하나만
+    return this._cbStack(Interp.N(hats[0]));
+  },
+
   /* ---------- 그림(모양) 방식 ---------- */
   async spriteObject(sp, fr, warn, qk, files, opts, events) {
     const res = TEX.RES;
@@ -3661,7 +3800,7 @@ const IDB = {
 
 
 /* ---------- 버전(등급) ---------- */
-const APP_VERSION = '3.2.0';
+const APP_VERSION = '3.5.0';
 const APP_DATE = '2026-10-08';
 const TIERS = {
   beta: { k: '베타', rank: 0, color: '#868e96' },
@@ -3681,10 +3820,11 @@ const GATE = {
   // 베타: 작품을 만들고 내보내는 데 꼭 필요한 핵심 블록
   CORE: ['typo_on_start', 'typo_on_time', 'typo_wait', 'typo_repeat', 'typo_forever', 'typo_if',
     'typo_goto', 'typo_move_to', 'typo_move_by', 'typo_rotate_set', 'typo_rotate_to', 'typo_rotate_by',
-    'typo_show', 'typo_hide', 'typo_scale_set', 'typo_scale_to', 'typo_effect_set', 'typo_glow',
+    'typo_show', 'typo_hide', 'typo_scale_set', 'typo_scale_to', 'typo_size_wh', 'typo_size_wh_to', 'typo_effect_set', 'typo_glow',
     'typo_text_set', 'typo_typewriter', 'typo_font_size', 'typo_bold', 'typo_color_set',
     'typo_fade_in', 'typo_pop_in', 'typo_glide_from', 'typo_fade_out', 'typo_fx_wave', 'typo_fx_spin',
-    'typo_random', 'typo_timer', 'typo_my'],
+    'typo_random', 'typo_timer', 'typo_my',
+    'typo_each_letter', 'typo_outline', 'typo_shadow', 'typo_gradient', 'typo_fx_float', 'typo_zoom_in', 'typo_cam_zoom', 'typo_font'],
   // 일반: 핵심 + 아래 순서대로 채워서 전체의 딱 절반
   NORMAL: ['typo_each_letter', 'typo_if_else', 'typo_wait_beat', 'typo_effect_add', 'typo_effect_clear', 'typo_flip',
     'typo_outline', 'typo_shadow', 'typo_gradient', 'typo_style_off', 'typo_text_value', 'typo_font', 'typo_ls',
@@ -3692,9 +3832,9 @@ const GATE = {
     'typo_timer_action', 'typo_timer_value', 'typo_timer_show', 'typo_approach', 'typo_slide_out', 'typo_pop_out',
     'typo_fx_float', 'typo_fx_blink', 'typo_cam_zoom', 'typo_cam_move', 'typo_cam_reset', 'typo_letter_no',
     'typo_letter_total', 'typo_math', 'typo_typewriter_cursor', 'typo_shake_in', 'typo_fx_flicker'],
-  maxSec: [10, 30, 120, 300],
+  maxSec: [15, 30, 120, 300],
   pixLimit: [50, 250, 500, 500],
-  textbox: 1, loop: 1, quality: 2, json: 2, pixabay: 0, soundFile: 1, betaFonts: 14,
+  textbox: 1, loop: 1, quality: 2, json: 2, pixabay: 0, soundFile: 1, betaFonts: 18,
   rank(tier) { return (TIERS[tier] || TIERS.beta).rank; },
   can(tier, need) { return this.rank(tier) >= need; },
   fontCount(tier) { const r = this.rank(tier); return r === 0 ? this.betaFonts : r === 1 ? Math.ceil(FONTS.list.length / 2) : FONTS.list.length; },
@@ -4549,6 +4689,9 @@ const App = {
     document.body.classList.toggle('mode-timeline', tl);
     this.tlTime = 0;
     this.setTab(tl ? 'timeline' : 'blocks');
+    // 모바일은 작품을 열면 '무대'부터 보여 준다 (데스크톱에선 CSS가 무시)
+    if (!['m-stage', 'm-blocks', 'm-look', 'm-sound', 'm-timeline'].some(c => document.body.classList.contains(c))) document.body.classList.add('m-stage');
+    this._syncMnav();
     this.maybeTutorial && this.maybeTutorial();
   },
   async projAction(pid, act) {
@@ -4627,6 +4770,29 @@ const App = {
     if (t === 'blocks') setTimeout(() => Blockly.svgResize(this.ws), 0);
     if (t === 'look') this.renderLook();
     if (t === 'sound') this.renderSounds();
+    this._syncMnav();
+  },
+  // 모바일 하단 내비게이션으로 화면 하나씩 전환
+  setMobileView(v) {
+    const B = document.body;
+    ['m-stage', 'm-blocks', 'm-look', 'm-sound', 'm-timeline'].forEach(c => B.classList.remove(c));
+    if (v === 'stage') { B.classList.add('m-stage'); }
+    else {
+      // 블록 버튼은 작품 종류에 따라 블록/타임라인 탭으로 연결
+      const tab = (v === 'blocks') ? (this.project && this.project.mode === 'timeline' ? 'timeline' : 'blocks') : v;
+      B.classList.add('m-' + (tab === 'timeline' ? 'timeline' : v));
+      this.setTab(tab);
+      if (tab === 'blocks' || tab === 'timeline') setTimeout(() => { if (this.ws) Blockly.svgResize(this.ws); }, 30);
+    }
+    this._syncMnav();
+  },
+  _syncMnav() {
+    const B = document.body;
+    const cur = ['stage', 'blocks', 'look', 'sound', 'timeline'].find(c => B.classList.contains('m-' + c)) || 'stage';
+    const active = (cur === 'timeline') ? 'blocks' : cur;
+    document.querySelectorAll('#mnav [data-mview]').forEach(b => b.classList.toggle('on', b.dataset.mview === active));
+    const mb = document.getElementById('mnavBlocks');
+    if (mb) mb.querySelector('.ic').nextSibling.textContent = (this.project && this.project.mode === 'timeline') ? '타임라인' : '블록';
   },
 
   /* ================= 무대 ================= */
@@ -5101,6 +5267,64 @@ const App = {
     document.getElementById('dlgImage').showModal();
     if (can) document.getElementById('pxQuery').focus();
   },
+  openBrush() {
+    const cv = document.getElementById('brushCanvas');
+    if (!cv.dataset.ready) {
+      this._brush = { kind: 'pen', color: '#ffd43b', size: 10, drawing: false, strokes: [], cur: null };
+      const pos = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height }; };
+      cv.addEventListener('pointerdown', e => { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (x) {} this._brush.cur = { kind: this._brush.kind, color: this._brush.color, size: this._brush.size, pts: [pos(e)] }; this._brush.drawing = true; this._brushRedraw(); });
+      cv.addEventListener('pointermove', e => { if (!this._brush.drawing) return; e.preventDefault(); this._brush.cur.pts.push(pos(e)); this._brushRedraw(); });
+      const end = () => { if (!this._brush.drawing) return; this._brush.drawing = false; if (this._brush.cur && this._brush.cur.pts.length) this._brush.strokes.push(this._brush.cur); this._brush.cur = null; this._brushRedraw(); };
+      cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+      const sw = document.getElementById('brushSwatches');
+      ['#ffffff', '#ffd43b', '#ff6b6b', '#4dabf7', '#51cf66', '#ff8cc8', '#845ef7', '#000000'].forEach(c => { const b = document.createElement('button'); b.className = 'bt-sw'; b.style.background = c; b.onclick = () => { document.getElementById('brushColor').value = c; this._brush.color = c; if (this._brush.kind === 'eraser') { this._brush.kind = 'pen'; this._brushSyncUI(); } }; sw.appendChild(b); });
+      document.querySelectorAll('.brush-kind').forEach(b => b.onclick = () => { this._brush.kind = b.dataset.bk; this._brushSyncUI(); });
+      document.getElementById('brushColor').oninput = e => { this._brush.color = e.target.value; };
+      document.getElementById('brushSize').oninput = e => { this._brush.size = +e.target.value; };
+      document.getElementById('brushUndo').onclick = () => { this._brush.strokes.pop(); this._brushRedraw(); };
+      document.getElementById('brushClear').onclick = () => { this._brush.strokes = []; this._brushRedraw(); };
+      document.getElementById('brushDone').onclick = () => this._brushDone();
+      cv.dataset.ready = '1';
+    }
+    this._brush.strokes = []; this._brush.cur = null; this._brushRedraw();
+    document.getElementById('dlgBrush').showModal();
+  },
+  _brushSyncUI() { document.querySelectorAll('.brush-kind').forEach(b => b.classList.toggle('on', b.dataset.bk === this._brush.kind)); },
+  _drawStroke(ctx, s) {
+    ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if (s.kind === 'eraser') { ctx.globalCompositeOperation = 'destination-out'; ctx.strokeStyle = 'rgba(0,0,0,1)'; ctx.fillStyle = 'rgba(0,0,0,1)'; ctx.lineWidth = s.size * 1.8; }
+    else {
+      ctx.globalCompositeOperation = 'source-over'; ctx.strokeStyle = s.color; ctx.fillStyle = s.color; ctx.lineWidth = s.size;
+      if (s.kind === 'marker') { ctx.globalAlpha = 0.5; ctx.lineWidth = s.size * 1.7; }
+      else if (s.kind === 'neon') { ctx.shadowColor = s.color; ctx.shadowBlur = s.size * 1.6; }
+      else if (s.kind === 'crayon') { ctx.globalAlpha = 0.85; }
+    }
+    const p = s.pts; ctx.beginPath();
+    if (p.length < 2) { ctx.arc(p[0].x, p[0].y, Math.max(1, ctx.lineWidth / 2), 0, 7); ctx.fill(); }
+    else { ctx.moveTo(p[0].x, p[0].y); for (let i = 1; i < p.length; i++) ctx.lineTo(p[i].x, p[i].y); ctx.stroke(); if (s.kind === 'neon') { ctx.shadowBlur = 0; ctx.stroke(); } }
+    ctx.restore();
+  },
+  _brushRedraw() {
+    const cv = document.getElementById('brushCanvas'), ctx = cv.getContext('2d');
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    for (const s of this._brush.strokes) this._drawStroke(ctx, s);
+    if (this._brush.cur) this._drawStroke(ctx, this._brush.cur);
+  },
+  async _brushDone() {
+    const cv = document.getElementById('brushCanvas'), ctx = cv.getContext('2d');
+    const d = ctx.getImageData(0, 0, cv.width, cv.height).data;
+    let minX = cv.width, minY = cv.height, maxX = 0, maxY = 0, found = false;
+    for (let y = 0; y < cv.height; y++) for (let x = 0; x < cv.width; x++) { if (d[(y * cv.width + x) * 4 + 3] > 8) { found = true; if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; } }
+    if (!found) { this.toast('먼저 붓으로 그려 주세요 🖌️'); return; }
+    const pad = 8; minX = Math.max(0, minX - pad); minY = Math.max(0, minY - pad); maxX = Math.min(cv.width - 1, maxX + pad); maxY = Math.min(cv.height - 1, maxY + pad);
+    const w = maxX - minX + 1, h = maxY - minY + 1;
+    const out = document.createElement('canvas'); out.width = w; out.height = h;
+    out.getContext('2d').drawImage(cv, minX, minY, w, h, 0, 0, w, h);
+    const url = out.toDataURL('image/png');
+    document.getElementById('dlgBrush').close();
+    await this.addImageObject(url, w, h, '붓그림');
+    this.toast('붓 그림을 무대에 넣었어요 🖌️');
+  },
   openShapes() {
     const g = document.getElementById('shapeGrid');
     if (!g.dataset.ready) {
@@ -5197,6 +5421,7 @@ const App = {
     }
     const r = GATE.rank(this.user.tier);
     const opts = {
+      method: (document.querySelector('input[name="exMethod"]:checked') || {}).value || 'bake',
       mode: document.querySelector('input[name="exMode"]:checked').value,
       seconds: U.clamp(Number(document.getElementById('exSec').value) || 5, 0.5, GATE.maxSec[r]),
       loop: document.getElementById('exLoop').checked,
@@ -5321,6 +5546,18 @@ const App = {
     $('speed').onchange = e => (this.speed = Number(e.target.value));
     $('btnSave').onclick = () => this.saveFile();
     $('btnExport').onclick = () => this.openExport();
+    if ($('btnPng')) $('btnPng').onclick = () => {
+      const eng = this.run || (this.seek && this.seek.eng) || this.preview;
+      if (!eng) { this.toast('미리보기를 먼저 실행해 주세요'); return; }
+      try {
+        const off = document.createElement('canvas'); off.width = 1920; off.height = 1080;
+        eng.render(off.getContext('2d'), off.width, off.height, {});
+        const a = document.createElement('a'); a.href = off.toDataURL('image/png');
+        a.download = 'typo-studio-' + Date.now() + '.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        this.toast('사진을 저장했어요 📷 (고화질 1920×1080)');
+      } catch (e) { this.toast('사진 저장 실패: ' + e.message); }
+    };
     $('exGo').onclick = () => this.doExport(false);
     $('exJson').onclick = e => { e.preventDefault(); this.doExport(true); };
     $('projName').oninput = e => { this.project.name = e.target.value; this.autosave(); };
@@ -5329,6 +5566,7 @@ const App = {
     $('setSave').onclick = () => { const v = $('setKey').value.trim(); Pixabay.key = v || Pixabay.DEFAULT_KEY; $('dlgSettings').close(); this.toast('설정을 저장했어요.'); };
     document.querySelectorAll('dialog [data-close]').forEach(b => (b.onclick = () => b.closest('dialog').close()));
     document.querySelectorAll('.tabs [data-tab]').forEach(b => (b.onclick = () => this.setTab(b.dataset.tab)));
+    document.querySelectorAll('#mnav [data-mview]').forEach(b => (b.onclick = () => this.setMobileView(b.dataset.mview)));
     $('btnUndo').onclick = () => this.ws.undo(false);
     $('btnRedo').onclick = () => this.ws.undo(true);
     $('btnTidy').onclick = () => this.ws.cleanUp();
@@ -5341,6 +5579,7 @@ const App = {
       if (k === 'text') this.addObject(this.newObject('text'));
       if (k === 'shape') this.openShapes();
       if (k === 'image') { this.imageMode = null; this.openImageDialog(); }
+      if (k === 'brush') this.openBrush();
     }));
     $('shapeGrid').onclick = e => {
       const b = e.target.closest('.shape-btn'); if (!b) return;
@@ -6290,6 +6529,7 @@ const EXPERT = {
     typo_rotate_set: 'rotation = %1°', typo_rotate_to: 'tweenRotation(%1°, %2 s, %3)', typo_rotate_by: 'rotateBy(%1°, %2 s, %3)',
     typo_show: 'visible = true', typo_hide: 'visible = false', typo_effect_add: 'filter.%1 += %2', typo_effect_set: 'filter.%1 = %2',
     typo_effect_to: 'tweenFilter(%1 → %2, %3 s, %4)', typo_effect_clear: 'filters.clear()', typo_scale_set: 'scale = %1 %', typo_scale_to: 'tweenScale(%1 %, %2 s, %3)',
+    typo_size_wh: 'size = (w %1, h %2)', typo_size_wh_to: 'tweenSize(w %1, h %2, %3 s, %4)',
     typo_flip: 'flip(%1)', typo_layer: 'zIndex(%1)', typo_shape_change: 'shape = %1', typo_glow: 'glow(color %1, blur %2)', typo_outline: 'stroke(color %1, width %2)',
     typo_shadow: 'dropShadow(%1, dx %2, dy %3)', typo_gradient: 'linearGradient(%1 → %2)', typo_shine: 'shineSweep(%1 s)', typo_style_off: 'remove(%1)',
     typo_particles: 'emit(%1 × %2, color %3, velocity %4)', typo_flash: 'screenFlash(%1, %2 s)', typo_bg_to: 'tweenBackground(%1, %2 s, %3)',
@@ -6364,6 +6604,7 @@ const DESC = {
   typo_effect_add: '엔트리의 효과 블록과 같아요. 투명도·색깔·밝기를 지금 값에서 더해요.', typo_effect_set: '효과를 정한 값으로 바로 바꿔요.',
   typo_effect_to: '효과를 정한 값까지 이징을 적용해 바꿔요.', typo_effect_clear: '투명도·색깔·밝기 효과를 모두 처음으로 돌려요.',
   typo_scale_set: '크기를 바로 정해요(100% = 원래 크기).', typo_scale_to: '크기를 이징을 적용해 바꿔요.',
+  typo_size_wh: '가로·세로를 따로 정해요. 도형·붓·사진에서 써요(글상자엔 효과 없음).', typo_size_wh_to: '가로·세로를 이징으로 부드럽게 바꿔요.',
   typo_flip: '좌우 또는 상하로 뒤집어요.', typo_layer: '맨 앞이나 맨 뒤로 보내요(z-index).', typo_shape_change: '도형 오브젝트의 모양을 바꿔요.',
   typo_glow: '글자 둘레에 빛이 번지게 해요. 세기가 클수록 넓게 번져요.', typo_outline: '글자에 외곽선(stroke)을 둘러요.', typo_shadow: '글자 아래에 그림자를 넣어요.',
   typo_gradient: '글자 색을 위에서 아래로 두 색이 이어지게 칠해요.', typo_shine: '빛나는 띠가 글자 위를 한 번 지나가요.', typo_style_off: '꾸미기 효과를 지워요.',
@@ -6651,6 +6892,25 @@ CHANGELOG.unshift(['3.2.0', '2026-10-08', [
   '이용약관 정리 (워터마크는 지워도 됨, 자작 발언 금지, 이용 제한 단계, 이의 신청)',
   '관리자: 작품 확인(엔트리 파일 검사), 이용 제한(경고·7일·30일·영구)',
   '내보내기 번호와 내 내보내기 기록', '블록·글자 색 대비 개선', '앱으로 설치 (홈 화면 아이콘)',
+]]);
+
+CHANGELOG.unshift(['3.3.0', '2026-10-28', [
+  '블록 색을 더 밝고 또렷하게 새로 칠했어요 (카테고리 구분이 훨씬 선명해요)',
+  '도구상자에서 잠긴 블록·잠긴 카테고리 표시를 숨겨 더 깔끔해졌어요 (모든 버전)',
+  '베타에서 쓸 수 있는 블록·글꼴(18종)·최대 길이(15초)를 조금 더 넓혔어요',
+  '📷 사진 저장 — 지금 화면을 고화질(1920×1080) PNG 이미지로 바로 내려받을 수 있어요',
+]]);
+
+CHANGELOG.unshift(['3.4.0', '2026-10-28', [
+  '🖌️ 붓 — 펜·마커·네온·크레용·지우개로 자유롭게 그려서 "그림 오브젝트"로 무대에 넣어요 (추가 메뉴 › 붓)',
+  '그린 그림은 도형·사진과 똑같이 블록으로 움직이고, 엔트리로도 그림 오브젝트로 나가요',
+  '가로·세로 크기 블록 추가 — 도형·붓·사진의 너비와 높이를 따로, 이징으로도 바꿀 수 있어요 (생김새 꾸러미)',
+]]);
+
+CHANGELOG.unshift(['3.5.0', '2026-10-28', [
+  '📱 휴대폰에서도 작품을 만들 수 있어요! 블록 편집·모양·소리까지 전부 터치로 쓸 수 있게 크게 바꿨어요',
+  '화면 아래 새 내비게이션(무대·블록·모양·소리)으로 한 화면씩 편하게 오가요',
+  '"휴대폰은 보기 전용" 안내는 이제 없어졌어요 — 폰·태블릿·컴퓨터 어디서든 똑같이 만들어요',
 ]]);
 
 const NOTICE_320 = {
