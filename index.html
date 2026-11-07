@@ -113,6 +113,8 @@ dialog::backdrop{background:rgba(20,24,40,.45)}
 .shape-btn{display:flex;flex-direction:column;align-items:center;gap:4px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 4px;cursor:pointer;font-size:12px}
 .shape-btn:hover{border-color:var(--accent);background:#f3f5ff}
 .px-bar{display:flex;gap:6px;margin-bottom:8px}
+.px-import{display:flex;gap:6px;margin-top:10px}
+.px-import input{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px}
 .px-bar input[type=search]{flex:1;border:1px solid var(--line);border-radius:var(--r-md);padding:8px 10px}
 .px-bar select{border:1px solid var(--line);border-radius:var(--r-md);padding:0 8px;background:#fff}
 #pxInfo{color:var(--muted);font-size:12px;margin:4px 0 8px}
@@ -189,7 +191,7 @@ body:not(.is-admin) .admin-only{display:none}
 /* ===== 로그인 ===== */
 #authScreen{background:#121530;color:#fff;align-items:center;justify-content:center;overflow:auto}
 .auth-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center;max-width:980px;width:92vw;padding:40px 0}
-.hero-type{display:flex;gap:6px;font:400 112px/1 "Black Han Sans","IBM Plex Sans KR",sans-serif}
+.hero-type{display:flex;gap:6px;font:800 112px/1 "Black Han Sans","IBM Plex Sans KR",sans-serif;font-weight:800}
 .hero-type span{display:inline-block;color:#fff;text-shadow:0 0 28px rgba(92,124,250,.8)}
 .hero-type span:nth-child(1){transform:rotate(-6deg) translateY(6px);color:#ffd43b;text-shadow:0 0 26px rgba(255,212,59,.6)}
 .hero-type span:nth-child(3){transform:rotate(5deg) translateY(-8px);color:#ff6b8b;text-shadow:0 0 26px rgba(255,107,139,.6)}
@@ -307,6 +309,19 @@ body:not(.tab-blocks) #btnUndo,body:not(.tab-blocks) #btnRedo,body:not(.tab-bloc
 .locked-opt{opacity:.5}
 .lock-tag{font-size:11px;color:#c92a2a;font-weight:700;margin-left:4px}
 @media (max-width:860px){.auth-wrap{grid-template-columns:1fr}.hero-type{font-size:72px}.look{grid-template-columns:1fr}.look-side{position:static}.admin-grid{grid-template-columns:1fr}}
+@media (max-width:560px){
+  #authScreen{align-items:flex-start}
+  .auth-wrap{grid-template-columns:1fr;gap:14px;width:100%;max-width:100%;padding:20px 14px 34px}
+  .auth-hero{text-align:center}
+  .hero-logo{width:52px;height:52px;margin:0 auto 8px}
+  .hero-type{font-size:clamp(40px,13vw,58px);font-weight:800;justify-content:center;gap:4px}
+  .hero-sub{font-size:14px;line-height:1.55;margin:12px 0 0}
+  .auth-card{padding:18px 15px 14px;border-radius:16px}
+  .auth-form .f input{font-size:16px;padding:12px}
+  .btn.big{padding:13px;font-size:16px}
+  .auth-tabs button{padding:11px;font-size:15px}
+  .auth-foot{font-size:11px;line-height:1.8}
+}
 
 .auth-msg .raw{display:block;font-weight:400;color:var(--muted);font-size:11px;margin-top:4px;word-break:break-all}
 .auth-msg .diag-link{font-weight:600;margin-left:4px}
@@ -546,7 +561,6 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
       <span class="hero-logo"></span>
       <div class="hero-type"><span>타</span><span>이</span><span>포</span></div>
       <p class="hero-sub">엔트리 타이포그래피를 블록으로 만들고<br><b>.ent</b> 파일로 바로 옮겨요</p>
-      <span class="beta-pill">BETA</span>
     </div>
     <div class="auth-card">
       <div class="auth-tabs" role="tablist">
@@ -573,7 +587,7 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
       <p id="authMsg" class="auth-msg" role="alert"></p>
       <p class="auth-links"><a href="#" id="forgotLink">비밀번호를 잊었어요</a></p>
       <p id="authNotice" class="auth-notice"></p>
-      <p class="auth-foot"><b class="ver">버전 3.5.0 (10/28)</b> · <span id="modeNote"></span> <a href="#" data-about="about">소개</a> <a href="#" id="diagBtn">서버 점검</a> <a href="#" id="adminLink">관리자</a></p>
+      <p class="auth-foot"><b class="ver">버전 3.6.0 (11/7)</b> · <span id="modeNote"></span> <a href="#" data-about="about">소개</a> <a href="#" id="diagBtn">서버 점검</a> <a href="#" id="adminLink">관리자</a></p>
     </div>
   </div>
 </section>
@@ -581,7 +595,7 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
 <!-- ============ 2. 내 작품 ============ -->
 <section id="homeScreen" class="screen">
   <header class="top">
-    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">타이포 스튜디오</span><span class="beta-pill small">BETA</span></div>
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">타이포 스튜디오</span></div>
     <div class="spacer"></div>
     <button class="btn" data-about="about">소개</button>
     <button class="btn admin-only" data-go="admin">관리자</button>
@@ -620,7 +634,7 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
 <section id="editorScreen" class="screen">
   <header class="top">
     <button class="btn" data-go="home" title="내 작품 목록">← 내 작품</button>
-    <input id="projName" class="proj-name" aria-label="작품 이름"><span class="ver-chip">v3.5.0</span>
+    <input id="projName" class="proj-name" aria-label="작품 이름"><span class="ver-chip">v3.6.0</span>
     <div class="run">
       <button id="btnRun" class="btn btn-run">▶ 시작하기</button>
       <button id="btnStop" class="btn btn-stop" disabled>■ 정지하기</button>
@@ -803,6 +817,11 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
       <span>이미지 제공: <a href="https://pixabay.com/" target="_blank" rel="noopener">Pixabay</a></span>
       <label class="btn small upload">내 컴퓨터에서 고르기<input type="file" id="pxUpload" accept="image/*"></label>
     </div>
+    <div class="px-import">
+      <input type="url" id="pxUrl" placeholder="이미지 주소(URL) 붙여넣기 — 다른 곳에서 찾은 이미지">
+      <button class="btn small primary" id="pxUrlGo">주소로 가져오기</button>
+    </div>
+    <p class="hint" style="margin:6px 2px 0">또는 이미지를 복사한 뒤 이 창에서 <b>Ctrl+V</b>로 붙여넣어도 돼요.</p>
   </div>
 </dialog>
 
@@ -973,7 +992,7 @@ code.exid{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft)
         <tr><td>엔트리 내보내기 방식</td><td>독립 실행</td><td>독립 실행</td><td>블록·함수</td><td>블록·함수</td></tr>
       </tbody></table>
       <p class="ab-maker">만든 사람 <b>vectortype</b> · <a href="https://playentry.org/profile/641582adedcf8a00377de185/project?sort=created&amp;term=all&amp;isOpen=all" target="_blank" rel="noopener">엔트리 프로필 보기 ↗</a><br>지금은 베타 서비스 중이에요. 불편한 점이나 바라는 기능은 공지사항이나 관리자에게 알려 주세요.</p>
-      <p class="hint">버전 3.5.0 · 2026년 10월 28일</p>
+      <p class="hint">버전 3.6.0 · 2026년 11월 7일</p>
     </div>
     <div class="ab-pane" data-pane="log" hidden>
       <p class="hint">버전 번호: 첫째 자리는 큰 변화, 둘째는 기능 추가, 셋째는 버그·보안 수정이에요. 새 블록은 하이퍼·프로 → 일반 → 베타 순서로 열려요.</p>
@@ -1533,6 +1552,7 @@ class Engine {
     this.bg = new Sprite({ kind: 'rect', name: '배경', isBg: true, w: STAGE_W, h: STAGE_H, color: project.stage.bg, screenSpace: true });
     this.sprites.push(this.bg);
     this.flash = null;
+    this.wipe = null;
     this.byObj = new Map();
     // 오브젝트 목록은 엔트리처럼 '위쪽 = 맨 앞' 이므로 거꾸로 쌓는다
     [...project.objects].reverse().forEach(o => {
@@ -1701,6 +1721,19 @@ class Engine {
             const hue = Math.round(((el * b.speed * 360 + i * 30) % 360) / 15) * 15;  // 15도 단위로 끊어 모양 수를 줄인다
             o.color = U.hslToHex(hue, 90, 62); break;
           }
+          case 'breathe': {
+            const s = Math.sin(TAU * b.speed * el);
+            o.scale *= 1 + s * b.amt / 100;
+            o.alpha *= 1 - (0.5 - s * 0.5) * 0.25;
+            break;
+          }
+          case 'beat': {
+            const bf = this._beatFrames || (this._beatFrames = (this.project.beats || []).map(s => U.secToFrames(s)));
+            let amp = 0;
+            for (const f of bf) { const d = this.frame - f; if (d >= 0 && d < b.dur) amp = Math.max(amp, 1 - d / b.dur); }
+            o.scale *= 1 + EASE.easeOutQuad(amp) * b.amt / 100;
+            break;
+          }
         }
       }
     }
@@ -1830,8 +1863,29 @@ class Engine {
         ctx.strokeStyle = '#4dabf7'; ctx.strokeRect(-tex.w / 2, -tex.h / 2, tex.w, tex.h); ctx.setLineDash([]);
       }
     }
+    this._drawWipe(ctx, cw, ch);
     ctx.globalAlpha = 1;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  _drawWipe(ctx, cw, ch) {
+    const w = this.wipe; if (!w || w.a <= 0) return;
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = U.clamp(w.a, 0, 1);
+    ctx.fillStyle = w.color;
+    if (w.mode === 'circle') {
+      const R = Math.hypot(cw, ch) / 2 * 1.05 * w.cover;
+      ctx.beginPath(); ctx.arc(cw / 2, ch / 2, R, 0, Math.PI * 2); ctx.fill();
+    } else if (w.mode === 'pixels') {
+      const cols = 28, cell = cw / cols, rows = Math.ceil(ch / cell);
+      for (let gx = 0; gx < cols; gx++) for (let gy = 0; gy < rows; gy++) {
+        const hsh = ((gx * 73856093) ^ (gy * 19349663) ^ w.seed) >>> 0;
+        if (w.cover > (hsh % 1000) / 1000) ctx.fillRect(gx * cell, gy * cell, cell + 1, cell + 1);
+      }
+    } else {
+      ctx.fillRect(0, 0, cw * w.cover, ch);
+    }
+    ctx.restore();
   }
 }
 
@@ -2040,6 +2094,16 @@ const Interp = {
   *entrance(e, sp, n, fn) {
     sp.pending = false;
     for (let i = 1; i <= Math.max(1, n); i++) { fn(i / Math.max(1, n)); yield; }
+  },
+  *wipeFx(e, ctx, b, mode) {
+    const sm = EASE.easeInOutCubic || EASE.easeOutCubic;
+    const color = this.col(b), n = Math.max(4, this.fr(e, ctx, b));
+    const w = e.wipe = { mode, color, cover: 0, a: 1, seed: (e.rng() * 997) | 0 };
+    const half = Math.max(2, Math.floor(n / 2));
+    for (let i = 1; i <= half; i++) { w.cover = sm(i / half); yield; }
+    w.cover = 1;
+    for (let i = 1; i <= half; i++) { w.a = 1 - sm(i / half); yield; }
+    e.wipe = null;
   },
 
   *exec(e, ctx, b) {
@@ -2334,6 +2398,55 @@ const Interp = {
         const ts = sp.scale || 1, ta = sp.alpha || 1, n = this.fr(e, ctx, b);
         yield* this.entrance(e, sp, n, p => { sp.scale = ts * (1 + 1.4 * (1 - EASE.easeOutCubic(p))); sp.alpha = ta * EASE.easeOutQuad(p); });
         sp.scale = ts; break;
+      }
+
+      /* ----- 새 효과 (전환·초기화) 3.6.0 ----- */
+      case 'typo_slam_in': {
+        const ty = sp.y, ts = sp.scale || 1, ta = sp.alpha || 1, n = this.fr(e, ctx, b), h = 420;
+        yield* this.entrance(e, sp, n, p => {
+          const q = EASE.easeInQuad(p);
+          sp.y = ty + h * (1 - q);
+          sp.scale = ts * (1 + 0.8 * (1 - q));
+          sp.alpha = ta * Math.min(1, p * 5);
+        });
+        sp.y = ty; sp.scale = ts;
+        e.shake = { amt: Math.max(4, N('SHAKE')), left: 12, total: 12 };
+        break;
+      }
+      case 'typo_dive': {
+        const ss = sp.scale || 1, sa = sp.alpha || 1, z0 = cam.zoom, n = Math.max(2, this.fr(e, ctx, b));
+        const big = Math.max(3, N('AMT') / 100);
+        for (let i = 1; i <= n; i++) {
+          const p = EASE.easeInCubic(i / n);
+          sp.scale = ss * (1 + (big - 1) * p);
+          sp.alpha = sa * (1 - p);
+          cam.zoom = z0 * (1 + 0.3 * p);
+          yield;
+        }
+        sp.visible = false; sp.scale = ss; sp.alpha = sa; cam.zoom = z0;
+        break;
+      }
+      case 'typo_zoom_through': {
+        const ss = sp.scale || 1, sa = sp.alpha || 1, n = Math.max(2, this.fr(e, ctx, b));
+        const big = Math.max(4, N('AMT') / 100);
+        for (let i = 1; i <= n; i++) {
+          const t = i / n, p = EASE.easeInQuad(t);
+          sp.scale = ss * (1 + (big - 1) * p);
+          sp.alpha = sa * (1 - EASE.easeInQuad(Math.max(0, (t - 0.4) / 0.6)));
+          yield;
+        }
+        sp.visible = false; sp.scale = ss; sp.alpha = sa;
+        break;
+      }
+      case 'typo_fx_beat': e.addBehavior(sp, { type: 'beat', amt: N('AMT'), dur: 10 }); break;
+      case 'typo_circle_pop': yield* this.wipeFx(e, ctx, b, 'circle'); break;
+      case 'typo_pixel_dissolve': yield* this.wipeFx(e, ctx, b, 'pixels'); break;
+      case 'typo_reset_all': {
+        e.stopBehavior(sp, 'all');
+        e.setStyle(sp, { glow: null, outline: null, shadow: null, gradient: null });
+        sp.fxColor = 0; sp.fxBright = 0; sp.alpha = 1; sp.scale = 1; sp.rotation = 0;
+        sp.flipX = false; sp.flipY = false;
+        break;
       }
 
       /* ----- 흐름 (엔트리식) ----- */
@@ -2635,6 +2748,7 @@ const BLOCKS = (() => {
   B('looks', 'typo_effect_set', '%1 효과 %2 로', [dd('EFFECT', EFFECTS), num('VAL')], { VAL: 50 });
   B('looks', 'typo_effect_to', '%1 효과 %2 로 %3 초 %4', [dd('EFFECT', EFFECTS), num('VAL'), num('SEC'), ease()], { VAL: 100, SEC: 0.5 });
   B('looks', 'typo_effect_clear', '효과 지우기');
+  B('looks', 'typo_reset_all', '모든 효과 처음으로 되돌리기', [], {}, { tip: '투명도·색깔·밝기·크기·방향·좌우상하 뒤집기·꾸미기(빛번짐/외곽선/그림자/그라데이션)와 반복 효과를 한 번에 처음 상태로 돌려요. 위치는 그대로 둬요.' });
   B('looks', 'typo_scale_set', '크기 %1 %', [num('SCALE')], { SCALE: 100 });
   B('looks', 'typo_scale_to', '크기 %1 % 로 %2 초 %3', [num('SCALE'), num('SEC'), ease()], { SCALE: 150, SEC: 0.5 });
   B('looks', 'typo_size_wh', '가로 %1 세로 %2 로', [num('W'), num('H')], { W: 160, H: 160 }, { tip: '도형·붓·사진의 가로·세로 크기를 따로 정해요. 글상자에는 효과가 없어요.' });
@@ -2699,6 +2813,7 @@ const BLOCKS = (() => {
   B('enter', 'typo_spin_in', '빙글 등장 %1 초', [num('SEC')], { SEC: 0.7 });
   B('enter', 'typo_zoom_in', '줌인 등장 %1 초', [num('SEC')], { SEC: 0.6 });
   B('enter', 'typo_shake_in', '흔들리며 등장 %1 초', [num('SEC')], { SEC: 0.6 });
+  B('enter', 'typo_slam_in', '쿵! 내리꽂기 등장 %1 초 흔들림 %2', [num('SEC'), num('SHAKE')], { SEC: 0.5, SHAKE: 14 }, { tip: '위에서 거대하게 떨어져 쿵 하고 박히며 화면이 흔들려요. 비트 첫 박에 쓰면 강렬해요.' });
   B('enter', 'typo_fade_out', '사라지기 %1 초 %2', [num('SEC'), ease()], { SEC: 0.5 }, { tip: outTip });
   B('enter', 'typo_slide_out', '%1 으로 %2 만큼 퇴장 %3 초 %4', [dd('DIR', DIRS), num('DIST'), num('SEC'), ease()], { DIST: 60, SEC: 0.5 }, { fields: { EASE: 'easeInCubic' }, tip: outTip });
   B('enter', 'typo_scatter_out', '흩어지며 퇴장 %1 초', [num('SEC')], { SEC: 0.7 }, { tip: outTip + ' "글자마다" 안에 넣으면 글자가 흩날려요.' });
@@ -2718,7 +2833,9 @@ const BLOCKS = (() => {
   B('fx', 'typo_fx_rainbow', '무지개 속도 %1', [num('SPEED')], { SPEED: 0.5 }, { tip: fxTip });
   B('fx', 'typo_fx_glitch', '글리치 세기 %1', [num('AMT')], { AMT: 6 }, { tip: fxTip });
   B('fx', 'typo_fx_flicker', '네온 깜빡임', [], {}, { tip: fxTip });
-  B('fx', 'typo_fx_stop', '%1 멈추기', [dd('KIND', [['모든 반복 효과', 'all'], ['물결치기', 'wave'], ['둥실둥실', 'float'], ['흔들흔들', 'swing'], ['계속 돌기', 'spin'], ['두근두근', 'pulse'], ['부르르', 'jitter'], ['깜빡이기', 'blink'], ['무지개색', 'rainbow'], ['글리치', 'glitch'], ['네온 깜빡임', 'flicker']])]);
+  B('fx', 'typo_fx_breathe', '은은한 호흡 %1 % 속도 %2', [num('AMT'), num('SPEED')], { AMT: 6, SPEED: 0.5 }, { tip: fxTip + ' 커졌다 작아지며 투명도도 함께 숨 쉬듯 변해요.' });
+  B('fx', 'typo_fx_beat', '비트 펀치 %1 %', [num('AMT')], { AMT: 25 }, { tip: fxTip + ' 박자 찍기로 넣은 비트마다 확 커졌다 돌아와요. K-pop 타이포에 딱이에요.' });
+  B('fx', 'typo_fx_stop', '%1 멈추기', [dd('KIND', [['모든 반복 효과', 'all'], ['물결치기', 'wave'], ['둥실둥실', 'float'], ['흔들흔들', 'swing'], ['계속 돌기', 'spin'], ['두근두근', 'pulse'], ['부르르', 'jitter'], ['깜빡이기', 'blink'], ['무지개색', 'rainbow'], ['글리치', 'glitch'], ['네온 깜빡임', 'flicker'], ['은은한 호흡', 'breathe'], ['비트 펀치', 'beat']])]);
 
   /* 카메라 (모두 이징 카메라) */
   B('cam', 'typo_cam_move', '카메라 x %1 y %2 로 %3 초 %4', [num('X'), num('Y'), num('SEC'), ease()], { X: 60, Y: 0, SEC: 1 });
@@ -2729,6 +2846,10 @@ const BLOCKS = (() => {
   B('cam', 'typo_cam_shake', '화면 흔들기 %1 %2 초', [num('AMT'), num('SEC')], { AMT: 6, SEC: 0.4 }, { tip: '기다리지 않고 바로 다음 블록으로 넘어가요.' });
   B('cam', 'typo_cam_reset', '카메라 원래대로 %1 초 %2', [num('SEC'), ease()], { SEC: 0.8 });
   B('cam', 'typo_cam_set', '카메라 x %1 y %2 확대 %3 % 각도 %4', [num('X'), num('Y'), num('ZOOM'), num('DEG')], { X: 0, Y: 0, ZOOM: 100, DEG: 0 });
+  B('cam', 'typo_dive', '화면 속으로 다이브 %1 초 (세기 %2)', [num('SEC'), num('AMT')], { SEC: 0.6, AMT: 600 }, { tip: '이 오브젝트가 확 커지며 투명해지고 카메라가 밀고 들어가, 화면 속으로 빨려 드는 전환이에요. 끝나면 숨겨져요.' });
+  B('cam', 'typo_zoom_through', '글자 관통 줌 %1 초 (세기 %2)', [num('SEC'), num('AMT')], { SEC: 0.7, AMT: 900 }, { tip: '큰 글자를 카메라가 뚫고 지나가듯 거대 확대되며 사라져요. 다음 장면 등장과 이어 붙이면 좋아요.' });
+  B('cam', 'typo_circle_pop', '원형 팝 전환 색 %1 %2 초', [hex('COLOR', '#ffffff'), num('SEC')], { SEC: 0.6 }, { tip: '가운데에서 원이 퍼져 화면을 덮었다가 사라지는 전환이에요. 중간에 다른 오브젝트를 바꾸면 장면 전환이 돼요.' });
+  B('cam', 'typo_pixel_dissolve', '픽셀 디졸브 전환 색 %1 %2 초', [hex('COLOR', '#0b1020'), num('SEC')], { SEC: 0.7 }, { tip: '네모 픽셀이 지직 하고 무작위로 채워졌다 사라지는 디지털 전환이에요.' });
 
   /* 계산 */
   B('calc', 'typo_letter_no', '글자 번호', [], {}, { out: 1, tip: '"글자마다" 안에서 몇 번째 글자인지 (1부터)' });
@@ -3800,7 +3921,7 @@ const IDB = {
 
 
 /* ---------- 버전(등급) ---------- */
-const APP_VERSION = '3.5.0';
+const APP_VERSION = '3.6.0';
 const APP_DATE = '2026-10-08';
 const TIERS = {
   beta: { k: '베타', rank: 0, color: '#868e96' },
@@ -3824,14 +3945,16 @@ const GATE = {
     'typo_text_set', 'typo_typewriter', 'typo_font_size', 'typo_bold', 'typo_color_set',
     'typo_fade_in', 'typo_pop_in', 'typo_glide_from', 'typo_fade_out', 'typo_fx_wave', 'typo_fx_spin',
     'typo_random', 'typo_timer', 'typo_my',
-    'typo_each_letter', 'typo_outline', 'typo_shadow', 'typo_gradient', 'typo_fx_float', 'typo_zoom_in', 'typo_cam_zoom', 'typo_font'],
+    'typo_each_letter', 'typo_outline', 'typo_shadow', 'typo_gradient', 'typo_fx_float', 'typo_zoom_in', 'typo_cam_zoom', 'typo_font',
+    'typo_reset_all', 'typo_slam_in', 'typo_dive', 'typo_zoom_through', 'typo_circle_pop', 'typo_pixel_dissolve', 'typo_fx_breathe', 'typo_fx_beat'],
   // 일반: 핵심 + 아래 순서대로 채워서 전체의 딱 절반
   NORMAL: ['typo_each_letter', 'typo_if_else', 'typo_wait_beat', 'typo_effect_add', 'typo_effect_clear', 'typo_flip',
     'typo_outline', 'typo_shadow', 'typo_gradient', 'typo_style_off', 'typo_text_value', 'typo_font', 'typo_ls',
     'typo_color_to', 'typo_lyric_next', 'typo_sound_play', 'typo_sound_play_wait', 'typo_sound_volume', 'typo_sound_stop',
     'typo_timer_action', 'typo_timer_value', 'typo_timer_show', 'typo_approach', 'typo_slide_out', 'typo_pop_out',
     'typo_fx_float', 'typo_fx_blink', 'typo_cam_zoom', 'typo_cam_move', 'typo_cam_reset', 'typo_letter_no',
-    'typo_letter_total', 'typo_math', 'typo_typewriter_cursor', 'typo_shake_in', 'typo_fx_flicker'],
+    'typo_letter_total', 'typo_math', 'typo_typewriter_cursor', 'typo_shake_in', 'typo_fx_flicker',
+    'typo_reset_all', 'typo_slam_in', 'typo_dive', 'typo_zoom_through', 'typo_circle_pop', 'typo_pixel_dissolve', 'typo_fx_breathe', 'typo_fx_beat'],
   maxSec: [15, 30, 120, 300],
   pixLimit: [50, 250, 500, 500],
   textbox: 1, loop: 1, quality: 2, json: 2, pixabay: 0, soundFile: 1, betaFonts: 18,
@@ -5035,10 +5158,12 @@ const App = {
       ${deco('shadow', '그림자', [['color', '색', 'color'], ['dx', 'x'], ['dy', 'y']])}</div></div>`;
     let main = '';
     if (o.kind === 'text') {
-      const sample = U.esc((o.text || '').slice(0, 8) || '가나다 Aa');
+      const userSample = U.esc((o.text || '').slice(0, 8) || '가나다 Aa');
+      const engSample = 'Typography';
       const groups = [...new Set(FONTS.list.map(f => f.g))];
       const fontCards = groups.map(g => `<div class="font-group">${g}</div>` + FONTS.list.filter(f => f.g === g).map(f => {
         const lock = !GATE.fontOpen(tier, f.f);
+        const sample = (f.g === '영문 전용' || f.g === '픽셀') ? engSample : userSample;
         return `<button class="font-card ${f.f === o.font ? 'on' : ''} ${lock ? 'lock' : ''}" data-font="${f.f}" ${lock ? 'title="일반 버전부터 쓸 수 있어요"' : ''}>
           <span class="font-sample" style="font-family:'${f.f}',sans-serif">${sample}</span><span class="font-name">${f.k}${lock ? ' 🔒' : ''}</span></button>`;
       }).join('')).join('');
@@ -5598,6 +5723,29 @@ const App = {
         $('dlgImage').close();
       } catch (err) { this.toast(err.message); }
     };
+    // 다른 곳에서 찾은 이미지 가져오기 — 주소(URL) 입력
+    $('pxUrlGo').onclick = async () => {
+      const u = $('pxUrl').value.trim(); if (!u) return;
+      try {
+        const r = await Pixabay.toDataUrl(u);
+        await this.addImageObject(r.url, r.w, r.h, '가져온 이미지');
+        $('pxUrl').value = ''; $('dlgImage').close(); this.toast('이미지를 가져왔어요.');
+      } catch (err) { this.toast(err.message || '이미지를 가져오지 못했어요.'); }
+    };
+    $('pxUrl').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('pxUrlGo').click(); } };
+    // 복사한 이미지 붙여넣기(Ctrl+V)
+    $('dlgImage').addEventListener('paste', async e => {
+      const it = [...(e.clipboardData && e.clipboardData.items || [])].find(x => x.type && x.type.startsWith('image/'));
+      if (it) {
+        e.preventDefault();
+        try {
+          const url = await Pixabay.fileToDataUrl(it.getAsFile());
+          const r = await Pixabay.toDataUrl(url);
+          await this.addImageObject(r.url, r.w, r.h, '붙여넣은 이미지');
+          $('dlgImage').close(); this.toast('붙여넣은 이미지를 넣었어요.');
+        } catch (err) { this.toast(err.message || '붙여넣지 못했어요.'); }
+      }
+    });
     $('sndFile').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) this.addSound(f).catch(err => this.toast(err.message)); };
     $('paneSound').onclick = e => { const b = e.target.closest('button[data-sa]'); if (!b) return; this.soundAction(b.closest('.snd-row')?.dataset.id, b.dataset.sa, b); };
     $('paneSound').onchange = e => { const b = e.target.closest('input[data-sa]'); if (b) this.soundAction(b.closest('.snd-row')?.dataset.id, b.dataset.sa, b); };
@@ -6636,6 +6784,14 @@ const DESC = {
   typo_math: 'sin, cos, 절댓값 같은 계산을 해요. 각도는 도(°) 단위예요.', typo_my: '이 오브젝트의 위치·크기·방향·투명도 값이에요.', typo_cam_get: '카메라의 현재 값이에요.',
   typo_timer_action: '초시계를 시작·정지·초기화해요. 엔트리 초시계 블록으로 바뀌어요.', typo_timer_show: '무대 왼쪽 위의 초시계 창을 보이거나 숨겨요.',
   typo_timer_value: '초시계가 잰 시간(초)이에요.',
+  typo_slam_in: '위에서 거대하게 떨어져 쿵 하고 박히며 화면이 흔들려요. 비트 첫 박에 쓰면 강렬해요.',
+  typo_dive: '이 오브젝트가 확 커지며 투명해지고 카메라가 밀고 들어가, 화면 속으로 빨려 드는 전환이에요. 끝나면 숨겨져요.',
+  typo_zoom_through: '큰 글자를 카메라가 뚫고 지나가듯 거대 확대되며 사라져요. 다음 장면 등장과 이어 붙이면 좋아요.',
+  typo_circle_pop: '가운데에서 원이 퍼져 화면을 덮었다가 사라지는 전환이에요. 덮인 사이에 오브젝트를 바꾸면 장면 전환이 돼요.',
+  typo_pixel_dissolve: '네모 픽셀이 지직 하고 무작위로 채워졌다 사라지는 디지털 전환이에요.',
+  typo_reset_all: '투명도·색깔·밝기·크기·방향·뒤집기·꾸미기·반복 효과를 한 번에 처음 상태로 돌려요. 위치는 그대로예요.',
+  typo_fx_breathe: '커졌다 작아지며 투명도도 함께 숨 쉬듯 은은하게 변해요.',
+  typo_fx_beat: '박자 찍기로 넣은 비트마다 확 커졌다 돌아와요. K-pop 타이포에 딱이에요.',
 };
 const EASE_DESC = {
   In: '처음이 느리고 점점 빨라져요 (가속).', Out: '빠르게 출발해서 끝에서 느려져요 (감속). 등장에 가장 많이 써요.', InOut: '처음과 끝이 느리고 가운데가 빨라요.',
@@ -6912,6 +7068,13 @@ CHANGELOG.unshift(['3.5.0', '2026-10-28', [
   '화면 아래 새 내비게이션(무대·블록·모양·소리)으로 한 화면씩 편하게 오가요',
   '"휴대폰은 보기 전용" 안내는 이제 없어졌어요 — 폰·태블릿·컴퓨터 어디서든 똑같이 만들어요',
 ]]);
+CHANGELOG.unshift(['3.6.0', '2026-11-07', [
+  '새 화면 전환 효과 4종 — 화면 속 다이브, 글자 관통 줌, 원형 팝 전환, 픽셀 디졸브',
+  '새 강조 효과 — 비트 펀치(박자마다 쿵!), 쿵! 내리꽂기 등장, 은은한 호흡',
+  '"모든 효과 처음으로 되돌리기" 블록 — 투명도·색·크기·꾸미기·반복 효과를 한 번에 초기화',
+  '영문 전용·픽셀 글꼴은 미리보기 예시를 영어로 보여 줘요',
+  '둘러보기에 새 소개 작품을 올렸어요',
+]]);
 
 const NOTICE_320 = {
   title: '🎉 타이포 스튜디오 3.2.0 업데이트 안내',
@@ -6935,6 +7098,31 @@ const NOTICE_320 = {
 [그 밖에]
 · 블록과 글자 색을 더 또렷하게 바꿨어요.
 · 사이트를 앱처럼 설치해서 홈 화면 아이콘으로 열 수 있어요.
+
+언제나 고맙습니다.
+— 타이포 스튜디오 · vectortype`,
+};
+
+const NOTICE_360 = {
+  title: '🎉 타이포 스튜디오 3.6.0 — 새 효과 & 이벤트',
+  body: `안녕하세요, 타이포 스튜디오입니다. 이번 업데이트로 효과가 훨씬 많아졌어요!
+
+[새 화면 전환 효과]
+· 화면 속으로 다이브 — 글자 안으로 빨려 들어가는 전환
+· 글자 관통 줌 — 큰 글자를 카메라가 뚫고 지나가요
+· 원형 팝 전환 — 원이 퍼지며 장면이 바뀌어요
+· 픽셀 디졸브 — 네모 픽셀이 지직 하고 바뀌는 디지털 전환
+
+[새 강조·반복 효과]
+· 비트 펀치 — 박자 찍기로 넣은 비트마다 쿵! 하고 커져요 (K-pop 타이포에 딱이에요)
+· 쿵! 내리꽂기 등장 — 위에서 거대하게 떨어져 화면이 흔들려요
+· 은은한 호흡 — 숨 쉬듯 커졌다 작아져요
+· 모든 효과 처음으로 되돌리기 — 투명도·색·크기·꾸미기·반복 효과를 한 번에 초기화
+
+[글꼴]
+· 영문 전용·픽셀 글꼴은 미리보기 예시를 영어로 보여 줘요 (글꼴 모양이 제대로 보여요)
+
+둘러보기에 새 소개 작품도 올려 뒀어요. 한 번 구경해 보세요!
 
 언제나 고맙습니다.
 — 타이포 스튜디오 · vectortype`,
@@ -7195,7 +7383,15 @@ Object.assign(App, {
       raw.forEach(n => { if (n.title === NOTICE_313.title) { const b = n.body.replace(/— 타이포 스튜디오[^\n]*$/, '— 타이포 스튜디오 · vectortype'); if (b !== n.body) { n.body = b; fixed = true; } } });
       if (fixed) await IDB.set('notices', raw);
       const L = await Accounts.notices();
-      if (!L.some(n => n.title === NOTICE_320.title)) { await Accounts.addNotice(NOTICE_320.title, NOTICE_320.body, true); await this.renderNotices(); }
+      if (!L.some(n => n.title === NOTICE_320.title)) { await Accounts.addNotice(NOTICE_320.title, NOTICE_320.body, true); }
+      if (!L.some(n => n.title === NOTICE_360.title)) {
+        // 이전 공지는 고정 해제하고 새 공지만 맨 위에 고정
+        const raw2 = (await IDB.get('notices')) || [];
+        raw2.forEach(n => { if (n.pinned) n.pinned = false; });
+        await IDB.set('notices', raw2);
+        await Accounts.addNotice(NOTICE_360.title, NOTICE_360.body, true);
+      }
+      await this.renderNotices();
     } catch (e) { /* 무시 */ }
   },
 });
