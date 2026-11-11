@@ -8131,7 +8131,7 @@ Object.assign(App, {
       <td><b>${U.esc(u.id)}</b>${u.admin ? ' <span class="tier-badge" style="background:#e8590c">관리자</span>' : ''}${u.strikes ? ` <span class="strikes" title="위반 횟수">⚠ ${u.strikes}</span>` : ''} ${state(u)}</td>
       <td>${U.esc(u.nick || '')}</td><td>${d(u.created)}</td><td>${d(u.last)}</td><td>${counts[i]}</td>
       <td><select data-tier style="color:${TIERS[u.tier || 'beta'].color}">${TIER_KEYS.map(t => `<option value="${t}" ${(u.tier || 'beta') === t ? 'selected' : ''}>${TIERS[t].k}</option>`).join('')}</select></td>
-      <td class="row-act">${Accounts.canResetPw ? '<button data-ua="pw">비밀번호 재설정</button>' : ''}${Accounts.restrict && !u.admin ? restrictSel(u) : ''}${u.admin ? '' : '<button data-ua="del" class="danger">삭제</button>'}</td></tr>`).join('')
+      <td class="row-act"><button data-ua="projs">작품 열람</button>${Accounts.canResetPw ? '<button data-ua="pw">비밀번호 재설정</button>' : ''}${Accounts.restrict && !u.admin ? restrictSel(u) : ''}${u.admin ? '' : '<button data-ua="del" class="danger">삭제</button>'}</td></tr>`).join('')
       : '<tr><td colspan="7" class="hint">아직 가입한 사용자가 없어요.</td></tr>';
   },
 
